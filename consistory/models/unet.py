@@ -1283,6 +1283,8 @@ class SDUNet2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixi
     def from_pretrained_vanilla(cls, pretrained_model_path, subfolder=None, unet_additional_kwargs=None):
         if subfolder is not None:
             pretrained_model_path = os.path.join(pretrained_model_path, subfolder)
+        
+        pretrained_model_path = "/home/jovyan/.cache/huggingface/hub/models--KBlueLeaf--kohaku-v2.1/snapshots/0d9ad923d447081af3db92005e14718509af5fda/unet"
         print(f"loaded SD unet's pretrained weights from {pretrained_model_path} ...")
 
         config_file = os.path.join(pretrained_model_path, 'config.json')
