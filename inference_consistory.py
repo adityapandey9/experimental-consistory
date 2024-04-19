@@ -38,8 +38,8 @@ from transformers import CLIPTextModel, CLIPTokenizer, CLIPVisionModel
 from torchvision.transforms import PILToTensor
 
 from typing import Optional, Tuple, Union
-import datasets
-from datasets import load_dataset
+# import datasets
+# from datasets import load_dataset
 from consistory.models.unet import SDUNet2DConditionModel
 from consistory.models.attention import SETransformerBlock
 
@@ -408,17 +408,6 @@ def create_dift_map(args):
     
     return feature_map_layers
                
-                
-          
-                    
-                    
-            
-            
-            
-        
-        
-    
-    
 
 def generate_main(args, feature_map_layers):
     # feature_map_layers = None
