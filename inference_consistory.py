@@ -43,7 +43,7 @@ from typing import Optional, Tuple, Union
 from consistory.models.unet import SDUNet2DConditionModel
 from consistory.models.attention import SETransformerBlock
 
-from consistory.models.utils import freeze_params, unfreeze_params, expand_image, image_overlay_heat_map, otsu_thresholding, image_with_otsu, save_image
+from consistory.models.utils import freeze_params, unfreeze_params, expand_image, image_overlay_heat_map, otsu_thresholding, image_with_otsu
 from consistory.pipelines.pipeline_consistory import ConsiStoryPipeline
 
 from extern.dift.dift_sd import SDFeaturizer
@@ -126,7 +126,7 @@ def pre_generate_images_for_dift(args):
 
     # Save images
     for i, image in enumerate(images):
-        save_image(image, args.output_dir, f"image_{i}.png")
+        image.save(os.path.join(args.output_dir, "temp_dift", f"image_{i}.png"))
         
     print(len(unet.attention_map.all_attention_maps))
     
@@ -160,8 +160,9 @@ def pre_generate_images_for_dift(args):
                 heat_map_img = heat_map_img.detach().cpu()                    
                 img_otsu : Image.Image = image_with_otsu(heat_map_img)
 
-                save_image(img, args.output_dir, f"attention_map_{batch_pos}.png")
-                save_image(img_otsu, args.output_dir, f"mask_{batch_pos}.png")    
+                img.save(os.path.join(args.output_dir, "temp_dift", f"attention_map_{batch_pos}.png"))
+                img_otsu.save(os.path.join(args.output_dir, "temp_dift", f"mask_{batch_pos}.png"))
+    
 
 def create_dift_map(args):
     
@@ -381,8 +382,8 @@ def create_dift_map(args):
             source.putpixel((width, height), color) 
             target.putpixel((map_pos[2], map_pos[1]), color) 
             
-            save_image(source, args.output_dir, f"source_{layer}_{batch_index}_{height}_{width}.png")    
-            save_image(target, args.output_dir, f"target_{layer}_{batch_index}_{height}_{width}_{map_pos[0]}_{map_pos[1]}_{map_pos[2]}_{map_pos[3]}.png")    
+            source.save(os.path.join(args.output_dir, "temp_dift", f"source_{layer}_{batch_index}_{height}_{width}.png"))
+            target.save(os.path.join(args.output_dir, "temp_dift", f"target_{layer}_{batch_index}_{height}_{width}_{map_pos[0]}_{map_pos[1]}_{map_pos[2]}_{map_pos[3]}.png"))
         
         
     # print(fml0.shape) # (batch, 16, 16, 3)
@@ -490,7 +491,7 @@ def generate_main(args, feature_map_layers):
 
     # Save images
     for i, image in enumerate(images):
-        save_image(image, args.output_dir, f"image_{i}.png")
+        image.save(os.path.join(args.output_dir, f"image_{i}.png"))
         
     print(len(unet.attention_map.all_attention_maps))
     
@@ -525,8 +526,10 @@ def generate_main(args, feature_map_layers):
                 heat_map_img = heat_map_img.detach().cpu() 
                 img_otsu : Image.Image = image_with_otsu(heat_map_img)
 
-                save_image(img, args.output_dir, f"attention_map_{batch_pos}.png")
-                save_image(img_otsu, args.output_dir, f"attention_map_{batch_pos}.png")
+                img.save(os.path.join(args.output_dir,f"attention_map_{batch_pos}.png"))
+                img_otsu.save(os.path.join(args.output_dir,f"mask_{batch_pos}.png"))
+
+
 
 if __name__ == '__main__':
 
