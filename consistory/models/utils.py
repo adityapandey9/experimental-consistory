@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 import numpy as np
+import os
 from PIL import Image, ImageFont, ImageDraw
 from matplotlib import cm
 from fonts.ttf import Roboto
@@ -12,6 +13,18 @@ def freeze_params(params):
 def unfreeze_params(params):
     for param in params:
         param.requires_grad_(True)
+
+def save_image(image, output_dir, image_name):
+    # Ensure the directory exists
+    full_path = os.path.join(output_dir, "temp_dift")
+    if not os.path.exists(full_path):
+        os.makedirs(full_path)
+    
+    # Define the full file path
+    file_path = os.path.join(full_path, f"{image_name}.png")
+    
+    # Save the image
+    image.save(file_path)
         
 def expand_image(im: torch.Tensor, h = 512, w = 512,  absolute: bool = False, threshold: float = None) -> torch.Tensor:
 
