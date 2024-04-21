@@ -1285,7 +1285,10 @@ class SDUNet2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixi
             pretrained_model_path = os.path.join(pretrained_model_path, subfolder)
         
         pretrained_model_path = "/home/jovyan/.cache/huggingface/hub/models--KBlueLeaf--kohaku-v2.1/snapshots/0d9ad923d447081af3db92005e14718509af5fda/unet"
-        print(f"loaded SD unet's pretrained weights from {pretrained_model_path} ...")
+        local_repo_name = "--".join(["models"] + pretrained_model_path.split("/"))
+        snapshot_dir = os.path.join("~/.cache/huggingface/hub", local_repo_name, "snapshots")
+        snapshot_dir = os.path.join(snapshot_dir, os.listdir(snapshot_dir)[0])
+        print(f"loaded SD unet's pretrained weights from {pretrained_model_path} -- {snapshot_dir} ...")
 
         config_file = os.path.join(pretrained_model_path, 'config.json')
         if not os.path.isfile(config_file):
